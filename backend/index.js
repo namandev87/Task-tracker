@@ -39,6 +39,19 @@ app.post("/tasks", (req, res) => {
     res.json(newTask);
 });
 
+app.get("/tasks/:id", (req, res) => {
+    const taskId = parseInt(req.params.id);
+    const task = tasks.find(t => t.id === taskId);
+
+    if(!task){
+        return res.status(404).json({
+            error: "Task not found"
+        });
+    }
+
+    res.json(task);
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
