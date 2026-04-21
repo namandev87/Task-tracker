@@ -1,75 +1,89 @@
-// in-memory data (temporary)
-const tasks = [
-  { id: 1, title: "Learn Express", status: "pending" },
-  { id: 2, title: "Build Task API", status: "pending" }
-];
+const Task = require("../models/Task");
 
-// GET all tasks
-exports.getAllTasks = (req, res) => {
-  res.json(tasks);
+exports.getAllTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    res.json(tasks);
+  } catch (err) {
+    res.status(500).json({
+      error: "Server error"
+    })
+  }
 };
 
-// GET single task
-exports.getTaskById = (req, res) => {
-  const taskId = parseInt(req.params.id);
-  const task = tasks.find(t => t.id === taskId);
+exports.getTaskById = async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+  
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
 
-  if (!task) {
-    return res.status(404).json({ error: "Task not found" });
+    res.json(task);
+  } catch (err) {
+    res.status(500).json({
+      error: "Server error"
+    });
   }
-
-  res.json(task);
 };
 
-// POST task
-exports.createTask = (req, res) => {
-  const { title } = req.body;
+exports.createTask = async (req, res) => {
+  try {
+    const { title } = req.body;
 
-  if (!title || title.trim() === "") {
-    return res.status(400).json({ error: "Title is required" });
+    if (!title || title.trim() === "") {
+      return res.status(400).json({ error: "Title is required" });
+    }
+
+    const newTask = await Task.create({ title });
+
+    res.status(201).json(newTask);
+  } catch (err) {
+    res.status(500).json({
+      error: "Server error"
+    });
   }
-
-  const newTask = {
-    id: tasks.length + 1,
-    title,
-    status: "pending"
-  };
-
-  tasks.push(newTask);
-
-  res.status(201).json(newTask);
 };
 
-// PUT task
-exports.updateTask = (req, res) => {
-  const taskId = parseInt(req.params.id);
-  const task = tasks.find(t => t.id === taskId);
+exports.updateTask = async (req, res) => {
+  try {
+    const { title, status } = req.body;
 
-  if (!task) {
-    return res.status(404).json({ error: "Task not found" });
+    const task = await Task.findByIdAndUpdate(
+      req.params.id,
+      { title, status},
+      {new: true}
+    );
+
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    res.json(task);
+  } catch (err) {
+    res.status(500).json({
+      error: "Server error"
+    });
   }
-
-  const { title, status } = req.body;
-
-  if (title !== undefined) task.title = title;
-  if (status !== undefined) task.status = status;
-
-  res.json(task);
 };
 
-// DELETE task
-exports.deleteTask = (req, res) => {
-  const taskId = parseInt(req.params.id);
-  const index = tasks.findIndex(t => t.id === taskId);
+exports.deleteTask = async (req, res) => {
+  try {
+    const task = await Task.findByIdAndDelete(req.params.id);
 
-  if (index === -1) {
-    return res.status(404).json({ error: "Task not found" });
+    if(!task){
+      return res.status(404).json({
+        error: "Task not found"
+      });
+    }
+
+    res.json({
+      message: "Task deleted successfully",
+      task
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Server error"
+    });
   }
-
-  const deleted = tasks.splice(index, 1);
-
-  res.json({
-    message: "Task deleted successfully",
-    task: deleted[0]
-  });
 };
