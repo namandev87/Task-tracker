@@ -26,6 +26,11 @@ A full-stack task management application built using Node.js, Express.js, MongoD
 
 ## Installation
 
+NOTE: Create a `.env` file in the backend directory:
+
+MONGO_URI=your_mongodb_connection_string
+PORT=3000
+
 ```bash
 git clone https://github.com/namandev87/Task-tracker.git
 cd Task-tracker/backend
