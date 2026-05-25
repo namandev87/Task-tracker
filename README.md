@@ -1,21 +1,32 @@
-# Task Tracker (Full Stack - In Development)
+# Task Tracker
 
-A full-stack task management application built to learn backend API design,
-database handling, and frontend integration.
+A full-stack task management application built using Node.js, Express.js, MongoDB, and vanilla JavaScript.
 
-## Planned Features
-- User authentication
-- Create / update / delete tasks
-- Task status tracking
-- REST API backend
-- Simple web frontend
+## Features
 
-## Tech Stack (Planned)
+- Create, update, and delete tasks
+- Mark tasks as pending or completed
+- RESTful CRUD API
+- MongoDB integration using Mongoose
+- Dynamic frontend rendering using Fetch API
+- Simple and responsive UI
+
+## Tech Stack
+
+### Backend
 - Node.js
-- Express
-- JavaScript
-- Database (MongoDB / SQLite)
-- HTML/CSS frontend
+- Express.js
+- MongoDB
+- Mongoose
 
-## Status
-🚧 Currently in development.
+### Frontend
+- HTML
+- CSS
+- JavaScript
+
+## Installation
+
+```bash
+git clone https://github.com/namandev87/Task-tracker.git
+cd Task-tracker/backend
+npm install
